@@ -24,10 +24,10 @@ function spectral_window, n_samples, type = type, periodic = periodic, $
     n_use = n_samples
   endelse
 
-  cos_term1 = cos(2.*!pi*findgen(n_use)/(n_use-1))
-  cos_term2 = cos(4.*!pi*findgen(n_use)/(n_use-1))
-  cos_term3 = cos(6.*!pi*findgen(n_use)/(n_use-1))
-  cos_term4 = cos(8.*!pi*findgen(n_use)/(n_use-1))
+  cos_term1 = cos(2.*!pi*dindgen(n_use)/(n_use-1))
+  cos_term2 = cos(4.*!pi*dindgen(n_use)/(n_use-1))
+  cos_term3 = cos(6.*!pi*dindgen(n_use)/(n_use-1))
+  cos_term4 = cos(8.*!pi*dindgen(n_use)/(n_use-1))
 
   case type of
     'Hann': window = 0.5 * (1-cos_term1)
@@ -43,7 +43,7 @@ function spectral_window, n_samples, type = type, periodic = periodic, $
       endif else begin
         alpha = 0.5
       endelse
-      window = FLTARR(n_samples) + 1
+      window = DBLARR(n_samples) + 1
 
       edge_length = round(alpha*(n_use-1)/2.)
       if edge_length gt 0 then begin
