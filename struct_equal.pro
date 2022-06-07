@@ -1,3 +1,12 @@
+; A helper function to check two structures for equality.
+; Example: Compare two FHD obs structures after using getvar_savefile to restore
+; obs1 = getvar_savefile(/path/to/obs/savefile)
+; obs2 = getvar_savefile(/path/to/other/obs/savefile)
+; struct_equal,obs1,obs2
+; Example: Compare to a different tolerance
+; struct_equal,obs1,obs2,tol=1e-4
+; If structures are equal, function will not return any output.
+
 PRO struct_equal,paramA,paramB,tol=tol,last_tag=last_tag
 IF N_Elements(tol) EQ 0 THEN tol=1e-8
 
