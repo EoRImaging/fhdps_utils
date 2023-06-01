@@ -1,7 +1,7 @@
 ; A helper function to check two structures for equality.
 ; Example: Compare two FHD obs structures after using getvar_savefile to restore
-; obs1 = getvar_savefile(/path/to/obs/savefile)
-; obs2 = getvar_savefile(/path/to/other/obs/savefile)
+; obs1 = getvar_savefile('/path/to/obs/savefile', 'obs')
+; obs2 = getvar_savefile('/path/to/other/obs/savefile', 'obs')
 ; struct_equal,obs1,obs2
 ; Example: Compare to a different tolerance
 ; struct_equal,obs1,obs2,tol=1e-4
@@ -34,14 +34,18 @@ IF type EQ 8 THEN BEGIN ;structure type
             ; check that size of structures is the same
             IF array_equal(size(paramA.(t_i)), size(paramB.(ind))) NE 1 THEN BEGIN
                 print,last_tag
-                print,"the parameters have different sizes:"
+                print,"the parameters have different sizes"
+                print, 'size1:'
                 print,size(paramA.(t_i))
+                print, 'size2:'
                 print,size(paramB.(ind))
             ; check that types are the same
             ENDIF ELSE IF type1 NE type2 THEN BEGIN
                 print,last_tag
-                print,"the parameters have different types:"
+                print,"the parameters have different types"
+                print, 'type1:'
                 print,type1
+                print, 'type2:'
                 print,type2            
             ENDIF ELSE BEGIN
                 ; continue iterating if structure is structure type or pointer type
@@ -79,7 +83,7 @@ ENDIF ELSE IF type EQ 10 THEN BEGIN ;pointer type
     ; check for null pointers
     IF n_valid NE n_validb THEN BEGIN
         print,last_tag
-        print,"the parameters do not match"
+        print,"the parameters do not match; one is null"
     ENDIF ELSE BEGIN
         FOR p_i=0L,n_valid-1 DO BEGIN
             tol_comp=0
@@ -88,14 +92,18 @@ ENDIF ELSE IF type EQ 10 THEN BEGIN ;pointer type
             ; check that objects are the same size
             IF array_equal(size(*paramA[ptr_i[p_i]]), size(*paramB[ptr_i[p_i]])) NE 1 THEN BEGIN
                 print,last_tag
-                print,"the parameters have different sizes:"
+                print,"the parameters have different sizes"
+                print, 'size1:'
                 print,size(*paramA[ptr_i[p_i]])
+                print, 'size2:'
                 print,size(*paramB[ptr_i[p_i]])
             ; check that objects are the same 
             ENDIF ELSE IF type1 NE type2 THEN BEGIN
                 print,last_tag
-                print,"the parameters have different sizes:"
+                print,"the parameters have different types"
+                print, 'type1:'
                 print,type1
+                print, 'type2:'
                 print,type2
             ENDIF ELSE BEGIN
                 ; if have a structure or pointer, keep iterating through
