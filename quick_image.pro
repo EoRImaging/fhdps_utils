@@ -2,7 +2,8 @@ pro quick_image, image, xvals, yvals, data_range = data_range, data_min_abs = da
     xrange = xrange, yrange = yrange, data_aspect=data_aspect, $
     log=log, color_profile = color_profile, xtitle = xtitle, ytitle = ytitle, title = title, $
     cb_title = cb_title,  note = note, charsize = charsize_in, xlog = xlog, ylog = ylog, $
-    window_num = window_num, multi_pos = multi_pos, start_multi_params = start_multi_params, $
+    window_num = window_num, window_base_size = window_base_size, $
+    multi_pos = multi_pos, start_multi_params = start_multi_params, $
     no_ps_close = no_ps_close, alphabackgroundimage = alphabackgroundimage, $
     missing_value = missing_value, noerase = noerase, savefile = savefile, $
     png = png, eps = eps, pdf = pdf
@@ -192,7 +193,7 @@ pro quick_image, image, xvals, yvals, data_range = data_range, data_min_abs = da
   screen_size = get_screen_size()
   max_xsize = screen_size[0]
   max_ysize = screen_size[1]
-  base_size = 600
+  if n_elements(window_base_size) eq 0 then window_base_size = 600
   
   if n_elements(multi_pos) eq 4 then begin
     ;; work out positions scaled to the area allowed in multi_pos with proper aspect ratio
@@ -235,9 +236,9 @@ pro quick_image, image, xvals, yvals, data_range = data_range, data_min_abs = da
       multi_pos[3,*] = (row_val+1)/double(nrow)
       
       ;; define window size based on aspect ratio
-      base_size_use = base_size
-      xsize = round(base_size * x_factor * double(ncol))
-      ysize = round(base_size * y_factor * double(nrow))
+      base_size_use = window_base_size
+      xsize = round(base_size_use * x_factor * double(ncol))
+      ysize = round(base_size_use * y_factor * double(nrow))
       if not keyword_set(pub) then begin
         while (ysize gt max_ysize) or (xsize gt max_xsize) do begin
           if base_size_use gt 100 then base_size_use = base_size_use - 100 else base_size_use = base_size_use * .75
@@ -321,7 +322,7 @@ pro quick_image, image, xvals, yvals, data_range = data_range, data_min_abs = da
     
     no_erase = 1
   endif else begin
-    base_size_use = base_size
+    base_size_use = window_base_size
     xsize = round(base_size_use * x_factor)
     ysize = round(base_size_use * y_factor)
     
